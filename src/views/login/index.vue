@@ -90,11 +90,6 @@ export default {
             // 将后台返回的token令牌存储到前端缓存中
             window.localStorage.setItem('user-token', result.data.token)
             this.$router.push('/home') // 跳转到主页
-          }).catch(() => {
-            this.$message({
-              message: '用户名或验证码错误',
-              type: 'warning'
-            })
           })
         }
       })
