@@ -24,7 +24,7 @@
              </el-form-item>
              <el-form-item prop="agree">
                  <!-- 同意选项 -->
-                 <el-checkbox v-model="loginForm.agree">我已阅读并同意用户协议和隐私条款</el-checkbox>
+                 <el-checkbox v-model="loginForm.check">我已阅读并同意用户协议和隐私条款</el-checkbox>
              </el-form-item>
               <el-form-item>
                   <!-- 登录按钮 -->
@@ -40,36 +40,39 @@
 export default {
   data () {
     const validator = function (rule, value, callBack) {
-      // rule当前规则
-      // value当前表单项的值
-      // callback 回调函数
-      // 正常写法
-    //   if (value) {
-    //     // 正确 勾选了协议
-    //     callBack() // 一切OK请继续
-    //   } else {
-    //     // 不对 没勾选协议
-    //     callBack(new Error('您必须同意无条件被我们蒙骗'))
-    //   }
-      value ? callBack() : callBack(new Error('您必须同意无条件被我们蒙骗')) // 炫技模式
+      if (value) {
+        callBack() // 如果value为true直接通过
+      } else {
+        callBack(new Error('您必须无条件同意被坑'))
+      }
     }
     return {
-      // 表单数据 是一个对象
       loginForm: {
         mobile: '', // 手机号
         code: '', // 验证码
-        agree: false // 是否同意协议
+        check: false // 是否勾选协议
       },
+      // 定义 rules 校验规则 表单是根据规则去校验 没有规则 就没有校验
+      // key(字段名):value(数组对象=> 多个 => 一个字段 可能有一个或者多个校验规则)
       loginRules: {
-        //   决定着校验规则  key(字段名):value(对象数组) => 一个对象就是一个校验规则
-        // required 为true 就表示该字段必填 如果不填 就会提示消息
-        mobile: [{ required: true, message: '请输入您的手机号' },
-          { pattern: /^1[3456789]\d{9}$/, message: '请输入合法的手机号' }],
-        code: [{ required: true, message: '请输入您的验证码' },
-          { pattern: /^\d{6}$/, message: '验证码为6位数字' }],
-        agree: [{ validator }]
-      } // 登录规则集合对象
-      // 自定义形式去校验
+        mobile: [{
+          required: true, // 意味着必填
+          message: '手机号不能为空' // 如果没有满足要求 就会提示message的内容
+        }, {
+          pattern: /^1[3456789]\d{9}$/, // 正则表达式
+          message: '手机号格式不正确'
+        }],
+        code: [{
+          required: true,
+          message: '验证码不能为空'
+        }, {
+          pattern: /^\d{6}$/,
+          message: '验证码必须为6位数字'
+        }],
+        check: [{
+          validator
+        }]
+      }
     }
   },
   methods: {
@@ -85,7 +88,7 @@ export default {
             data: this.loginForm
           }).then(result => {
             // 将后台返回的token令牌存储到前端缓存中
-            window.localStorage.setItem('user-token', result.data.token)
+            window.localStorage.setItem('user-token', result.data.data.token)
             this.$router.push('/home') // 跳转到主页
           }).catch(() => {
             this.$message({
