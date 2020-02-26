@@ -22,6 +22,51 @@ const routes = [
     children: [{
       path: '',
       component: Main
+    },
+    {
+      // 评论列表
+      path: 'comment',
+      component: () => import('../views/comment')
+    },
+    {
+      // 发布文章
+      path: 'publish',
+      component: () => import('../views/publish')
+    },
+    {
+      // 内容列表
+      path: 'articles',
+      component: () => import('../views/articles')
+    },
+    {
+      // 素材管理
+      path: 'material',
+      component: () => import('../views/material')
+    },
+    {
+      // 账户信息
+      path: 'account',
+      component: () => import('../views/account')
+    },
+    {
+      // 图文数据
+      path: 'fansdata',
+      component: () => import('../views/fansdata')
+    },
+    {
+      // 粉丝概况
+      path: 'fansinfo',
+      component: () => import('../views/fansinfo')
+    },
+    {
+      // 粉丝列表
+      path: 'fanslist',
+      component: () => import('../views/fanslist')
+    },
+    {
+      // 粉丝画像
+      path: 'fansimg',
+      component: () => import('../views/fansimg')
     }]
   }
 
